@@ -6,35 +6,51 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        drawer: Drawer(),
-        floatingActionButton: FloatingActionButton(
-        onPressed:  () {
-          print ('Button clicked');
-        }
-        ),
-      
+      appBar: AppBar(),
+      drawer: Drawer(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('Button clicked');
+        },
+      ),
       body: Column(
         children: [
           Text(
-         'Let\'s sign you in!', 
-         style: TextStyle(
-         fontSize: 30, 
-        color: Colors.brown,
-           fontWeight: FontWeight.bold, letterSpacing: 0.5
-         ),
-           ),
-          Center(
-            child: Text(
-              'Welcome back! \n You\'ve been missed!',
+            'Let\'s sign you in!',
             style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blueGrey)
-              ),
-              Image.network(https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngegg.com%2Fen%2Fsearch%3Fq%3Dlogin%2BIcon&psig=AOvVaw0W3YafkebhKep8UmivN0DO&ust=1748285754102000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKD7ipGmv40DFQAAAAAdAAAAABAE',
-),
+                fontSize: 30,
+                color: Colors.brown,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5),
+          ),
+          Text(
+            'Welcome back! \n You\'ve been missed!',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.blueGrey),
+          ),
+          Image.network(
+            'https://3009709.youcanlearnit.net/Alien_LIL_131338.png',
+            height: 200,
+          ),
+          Container(
+            height: 150,
+            width: 150,
+            // child: FlutterLogo(),
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.all(50),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fitHeight,
+                  image: NetworkImage(
+                      'https://3009709.youcanlearnit.net/Alien_LIL_131338.png'),
+                ),
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(24)),
+          )
         ],
       ),
-
     );
   }
 }
