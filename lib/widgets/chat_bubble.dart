@@ -21,7 +21,7 @@ class ChatBubble extends StatelessWidget {
               style: TextStyle(fontSize: 20, color: Colors.white),
             ),
             Image.network(
-              'https://3009709.youcanlearnit.net/Alien_LIL_131338.png',
+              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
               height: 200,
             )
           ],

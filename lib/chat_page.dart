@@ -1,4 +1,3 @@
-
 import 'package:chat_app_b/widgets/chat_bubble.dart';
 import 'package:chat_app_b/widgets/chat_input.dart';
 import 'package:flutter/material.dart';
@@ -15,24 +14,26 @@ class ChatPage extends StatelessWidget {
         title: Text('Hi Sheina!'),
         actions: [
           IconButton(
-              onPressed: () {
-                print('Icon pressed!');
-              },
-              icon: Icon(Icons.logout))
+            onPressed: () {
+              print('Icon pressed!');
+            },
+            icon: Icon(Icons.logout),
+          )
         ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: ListView(
-              children: [
-                ChatBubble(
-                    alignment: Alignment.centerLeft,
-                    message: "Hello, this is Sheina!"),
-                ChatBubble(
-                    alignment: Alignment.centerRight,
-                    message: "Hello, this is Sheina!"),
-              ],
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return ChatBubble(
+                  alignment: index % 2 == 0
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  message: "Hello, this is Sheina!",
+                );
+              },
             ),
           ),
           ChatInput(),
