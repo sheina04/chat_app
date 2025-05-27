@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CounterStateful extends StatefulWidget {
-  //Widget variables should be final
+  
   final Color buttonColor;
 
   CounterStateful({Key? key, required this.buttonColor}) : super(key: key);
