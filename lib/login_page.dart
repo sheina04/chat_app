@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -10,6 +16,13 @@ class LoginPage extends StatelessWidget {
     print(userNameController.text);
     print(passwordController.text);
     print('Login successful!');
+  }
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,27 +62,48 @@ class LoginPage extends StatelessWidget {
                   height: 200,
                 ),
                 SizedBox(height: 20),
-                TextField(
-                  controller: userNameController,
-                  decoration: InputDecoration(
-                    hintText: 'Add your username',
-                    hintStyle: TextStyle(color: Colors.blueGrey),
-                    border: OutlineInputBorder(),
+
+                // FORM
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: userNameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please type your username";
+                          } else if (value.length < 5) {
+                            return "Your username should be more than 5 characters";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Add your username',
+                          hintStyle: TextStyle(color: Colors.blueGrey),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                      TextFormField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'Type your password',
+                          hintStyle: TextStyle(color: Colors.blueGrey),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 12),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Type your password',
-                    hintStyle: TextStyle(color: Colors.blueGrey),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 20),
+                SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: loginUser,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      loginUser();
+                    }
+                  },
                   child: Text(
                     'Login',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
