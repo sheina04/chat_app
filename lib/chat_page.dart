@@ -1,5 +1,5 @@
-import 'package:chat_app_b/widgets/chat_bubble.dart';
-import 'package:chat_app_b/widgets/chat_input.dart';
+import 'package:chat_app/widgets/chat_bubble.dart';
+import 'package:chat_app/widgets/chat_input.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatelessWidget {
