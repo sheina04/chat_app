@@ -1,12 +1,44 @@
+import 'dart:convert';
+
 import 'package:chat_app/widgets/chat_bubble.dart';
 import 'package:chat_app/widgets/chat_input.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_app/models/chat_message_entity.dart';
+import 'package:flutter/services.dart';
 
-class ChatPage extends StatelessWidget {
+import 'models/chat_message_entity.dart';
+
+class ChatPage extends StatefulWidget {
   final String username;
 
   const ChatPage({Key? key, required this.username}) : super(key: key);
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  List<ChatMessageEntity> _messages = [];
+
+  Future<void> _loadInitialMessages() async {
+    final response = await rootBundle.loadString('assets/mock_messages.json');
+    final List<dynamic> decodeList = jsonDecode(response);
+
+    final chatMessages = decodeList.map((listItem) {
+      return ChatMessageEntity.fromJson(listItem);
+    }).toList();
+
+    setState(() {
+      _messages = chatMessages;
+    });
+
+    print('Loaded ${_messages.length} messages');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialMessages();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +46,7 @@ class ChatPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Hi $username!'),
+        title: Text('Hi ${widget.username}!'),
         actions: [
           IconButton(
             onPressed: () {
@@ -29,19 +61,15 @@ class ChatPage extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: _messages.length,
               itemBuilder: (context, index) {
+                final message = _messages[index];
                 return ChatBubble(
-                  alignment: index % 2 == 0
-                      ? Alignment.centerLeft
-                      : Alignment.centerRight,
-                  entity: ChatMessageEntity(
-                    id: index.toString(),
-                    text: "Hello, this is $username!",
-                    createdAt: DateTime.now().millisecondsSinceEpoch,
-                    author: Author(userName: username),
-                    imageUrl: null, // or some dynamic image URL if needed
-                  ), message: 'Hello this is $username!',
+                  alignment: message.author.userName == widget.username
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  entity: message,
+                  message: message.text,
                 );
               },
             ),
