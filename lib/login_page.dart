@@ -1,5 +1,6 @@
 import 'package:chat_app/chat_page.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart'; // Add this for launching URLs
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,24 +13,25 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
+  final String _mainUrl = 'https://poojabhaumik.com';
 
   void loginUser(BuildContext context) {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      print(userNameController.text);
+    if (_formKey.currentState!.validate()) {
+      final username = userNameController.text;
+      print(username);
       print(passwordController.text);
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ChatPage(
-                    username: userNameController.text,
-                  )));
-      Navigator.pushNamed(context, '/chat',
-          arguments: '${userNameController.text}');
+      // Use pushReplacement to avoid back navigation to login
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatPage(username: username),
+        ),
+      );
 
       print('Login successful!');
     } else {
-      print('Not successful!');
+      print('Login not successful!');
     }
   }
 
@@ -72,13 +74,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                Image.network(
-                  'lib/assets/illustration.png',
+                Image.asset(
+                  'assets/c:\Users\Shiena Tandugon\Downloads\illustration.png', 
                   height: 200,
                 ),
                 SizedBox(height: 20),
 
-                // FORM
                 Form(
                   key: _formKey,
                   child: Column(
@@ -126,14 +127,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 10),
                 GestureDetector(
-                  onTap: () {
-                    print('Link clicked!');
+                  onTap: () async {
+                    if (!await launchUrl(Uri.parse(_mainUrl))) {
+                      throw 'Could not launch $_mainUrl';
+                    }
                   },
                   child: Column(
                     children: [
                       Text('Find us on'),
                       Text(
-                        'https://poojabhaumik.com',
+                        _mainUrl,
                         style: TextStyle(color: Colors.blue),
                       ),
                     ],
