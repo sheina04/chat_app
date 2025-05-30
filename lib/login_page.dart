@@ -19,13 +19,13 @@ class _LoginPageState extends State<LoginPage> {
       print(passwordController.text);
 
       Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatPage(
-            username: userNameController.text,
-          ),
-        ),
-      );
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChatPage(
+                    username: userNameController.text,
+                  )));
+      Navigator.pushNamed(context, '/chat',
+          arguments: '${userNameController.text}');
 
       print('Login successful!');
     } else {
