@@ -1,38 +1,53 @@
+import 'package:chat_app/models/chat_message_entity.dart';
 import 'package:flutter/material.dart';
 
 class ChatInput extends StatelessWidget {
-  ChatInput({Key? key}) : super(key: key);
+  final Function(ChatMessageEntity) onSubmit;
 
-  final TextEditingController chatMessageController = TextEditingController();
+  ChatInput({Key? key, required this.onSubmit}) : super(key: key);
+
+  final chatMessageController = TextEditingController();
 
   void onSendButtonPressed() {
-    print('Chat message: ${chatMessageController.text}');
+    print('ChatMessage: ${chatMessageController.text}');
+    //TODO: Add this new message to the default list
+
+    final newChatMessage = ChatMessageEntity(
+        text: chatMessageController.text,
+        id: "244",
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        author: Author(userName: 'poojab26'));
+
+    onSubmit(newChatMessage);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      color: Colors.black87,
+      height: 100,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Multiline TextField
-          Expanded(
-            child: TextField(
-              controller: chatMessageController,
-              keyboardType: TextInputType.multiline,
-              maxLines: 5,
-              minLines: 1,
-              textCapitalization: TextCapitalization.sentences,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: "Type your message",
-                hintStyle: TextStyle(color: Colors.blueGrey),
-                border: InputBorder.none,
-              ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
             ),
           ),
-          // Send Button
+          Expanded(
+              child: TextField(
+            keyboardType: TextInputType.multiline,
+            maxLines: 5,
+            minLines: 1,
+            controller: chatMessageController,
+            textCapitalization: TextCapitalization.sentences,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+                hintText: "Type your message",
+                hintStyle: TextStyle(color: Colors.blueGrey),
+                border: InputBorder.none),
+          )),
           IconButton(
             onPressed: onSendButtonPressed,
             icon: Icon(
@@ -42,6 +57,9 @@ class ChatInput extends StatelessWidget {
           ),
         ],
       ),
+      decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
     );
   }
 }

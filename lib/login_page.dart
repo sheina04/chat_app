@@ -1,46 +1,32 @@
-import 'package:chat_app/chat_page.dart';
+import 'package:chat_app/utils/brand_color.dart';
+import 'package:chat_app/utils/spaces.dart';
+import 'package:chat_app/widgets/login_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'; // Add this for launching URLs
+import 'package:social_media_buttons/social_media_buttons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  LoginPage({Key? key}) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
+  final _formkey = GlobalKey<FormState>();
 
-class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final userNameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final String _mainUrl = 'https://poojabhaumik.com';
-
-  void loginUser(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      final username = userNameController.text;
-      print(username);
+  void loginUser(context) {
+    if (_formkey.currentState != null && _formkey.currentState!.validate()) {
+      print(userNameController.text);
       print(passwordController.text);
 
-      // Use pushReplacement to avoid back navigation to login
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatPage(username: username),
-        ),
-      );
-
-      print('Login successful!');
+      Navigator.pushReplacementNamed(context, '/chat',
+          arguments: '${userNameController.text}');
+      print('login successful!');
     } else {
-      print('Login not successful!');
+      print('not successful!');
     }
   }
 
-  @override
-  void dispose() {
-    userNameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+  final userNameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  final _mainUrl = "https://poojabhaumik.com";
 
   @override
   Widget build(BuildContext context) {
@@ -48,102 +34,91 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Let\'s sign you in!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Let\'s sign you in!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
                     fontSize: 30,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Welcome back! \nYou\'ve been missed!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+                    letterSpacing: 0.5),
+              ),
+              Text(
+                'Welcome back! \n You\'ve been missed!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20,
-                    color: Colors.blueGrey,
-                  ),
+                    color: Colors.blueGrey),
+              ),
+              Image.asset(
+                'assets/illustration.png',
+                height: 200,
+              ),
+              Form(
+                key: _formkey,
+                child: Column(
+                  children: [
+                    LoginTextField(
+                      hintText: "Enter your username",
+                      validator: (value) {
+                        if (value != null &&
+                            value.isNotEmpty &&
+                            value.length < 5) {
+                          return "Your username should be more than 5 characters";
+                        } else if (value != null && value.isEmpty) {
+                          return "Please type your username";
+                        }
+                        return null;
+                      },
+                      controller: userNameController,
+                    ),
+                    verticalSpacing(24),
+                    LoginTextField(
+                      hasAsterisks: true,
+                      controller: passwordController,
+                      hintText: 'Enter your password',
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20),
-                Image.asset(
-                  'assets/c:\Users\Shiena Tandugon\Downloads\illustration.png', 
-                  height: 200,
-                ),
-                SizedBox(height: 20),
-
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: userNameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please type your username";
-                          } else if (value.length < 5) {
-                            return "Your username should be more than 5 characters";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Add your username',
-                          hintStyle: TextStyle(color: Colors.blueGrey),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                      TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Type your password',
-                          hintStyle: TextStyle(color: Colors.blueGrey),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 24),
-                ElevatedButton(
+              ),
+              verticalSpacing(24),
+              ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      loginUser(context);
-                    }
+                    loginUser(context);
                   },
                   child: Text(
                     'Login',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300),
-                  ),
+                  )),
+              GestureDetector(
+                onTap: () async {
+                  print('Link clicked!');
+                  if (!await launch(_mainUrl)) {
+                    throw 'Could not launch this!';
+                  }
+                },
+                child: Column(
+                  children: [
+                    Text('Find us on'),
+                    Text(_mainUrl),
+                  ],
                 ),
-                SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () async {
-                    if (!await launchUrl(Uri.parse(_mainUrl))) {
-                      throw 'Could not launch $_mainUrl';
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      Text('Find us on'),
-                      Text(
-                        _mainUrl,
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SocialMediaButton.twitter(
+                      size: 20, url: "https://twitter.com/pooja_bhaumik"),
+                  SocialMediaButton.linkedin(
+                      size: 20, url: "https://linkedin.com/in/poojab26")
+                ],
+              )
+            ],
           ),
         ),
       ),
