@@ -1,3 +1,4 @@
+import 'package:chat_app/chat_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,10 +13,19 @@ class _LoginPageState extends State<LoginPage> {
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void loginUser() {
-    print(userNameController.text);
-    print(passwordController.text);
-    print('Login successful!');
+  void loginUser(BuildContext context) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      print(userNameController.text);
+      print(passwordController.text);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ChatPage()),
+      );
+      print('Login successful!');
+    } else {
+      print('Not successful!');
+    }
   }
 
   @override
@@ -101,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      loginUser();
+                      loginUser(context);
                     }
                   },
                   child: Text(
