@@ -1,10 +1,11 @@
+import 'package:chat_app/models/chat_message_entity.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
   final String message;
   final Alignment alignment;
 
-  const ChatBubble({Key? key, required this.alignment, required this.message})
+  const ChatBubble({Key? key, required this.alignment, required this.message, required ChatMessageEntity entity})
       : super(key: key);
 
   @override
