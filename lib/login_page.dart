@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 20),
                 Image.network(
-                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+                  'lib/assets/illustration.png',
                   height: 200,
                 ),
                 SizedBox(height: 20),
